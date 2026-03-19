@@ -17,6 +17,14 @@ const nextConfig = {
   
   // Performance optimizations
   webpack: (config, { dev, isServer }) => {
+    // Fix for browser-only libraries in server build
+    if (isServer) {
+      config.externals = [
+        ...(Array.isArray(config.externals) ? config.externals : []),
+        'critters',
+      ]
+    }
+    
     // Tree shaking for better bundle size
     if (!dev) {
       config.optimization = {
